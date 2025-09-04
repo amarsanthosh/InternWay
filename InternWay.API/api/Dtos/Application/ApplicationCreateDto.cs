@@ -13,9 +13,8 @@ namespace api.Dtos.Application
         public int InternshipId { get; set; }
         [Required]
         public int StudentProfileId { get; set; }
+
         [Required]
-        public DateTime AppliedOn { get; set; }
-        [Required]
-        public Status Status { get; set; }  // e.g., Pending, Accepted, Rejected
+        public Status Status { get; set; } = Status.Pending;  // e.g., Pending, Accepted, Rejected
     }
 }

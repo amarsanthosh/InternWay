@@ -12,7 +12,8 @@ namespace api.Dtos.Internship
         [Required]
         public string Title { get; set; } = string.Empty;
         [Required]
-        [Range(10, 1000)]
+      [StringLength(1000, MinimumLength = 10)]
+
         public string Description { get; set; } = string.Empty;
         [Required]
         public string Location { get; set; } = string.Empty;
@@ -23,6 +24,7 @@ namespace api.Dtos.Internship
         [Required]
         public int RecruiterId { get; set; }
         [Required]
-        public ICollection<InternshipSkill> InternshipSkills { get; set; } = new List<InternshipSkill>();
+        public List<int> SkillIds { get; set; } = new List<int>();
+
     }
 }

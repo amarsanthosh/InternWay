@@ -11,8 +11,6 @@ namespace api.Dtos.Recruiter
         [Required]
         public string CompanyName { get; set; } = string.Empty;
         [Required]
-        public string AppUserId { get; set; } = string.Empty;
-        [Required]
         public string About { get; set; } = string.Empty;
         [Required]
         public string Location { get; set; } = string.Empty;

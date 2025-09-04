@@ -17,9 +17,8 @@ namespace api.Dtos.StudentProfile
         public string LinkedInUrl { get; set; } = string.Empty;
         [Required]
         public string ResumeUrl { get; set; } = string.Empty;
-        [Required]
-        public string AppUserId { get; set; } = string.Empty;
         [Required]        
-        public ICollection<StudentSkill> StudentSkills { get; set; } = new List<StudentSkill>();
+        public List<int> SkillIds { get; set; } = new List<int>();
+
     }
 }
