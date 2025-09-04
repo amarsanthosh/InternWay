@@ -11,7 +11,7 @@ namespace api.Models
         public int InternshipId { get; set; }
         public Internship? Internship { get; set; }
         public int StudentProfileId { get; set; }
-        public StudentProfile StudentProfile { get; set; } = null!;
+        public StudentProfile? Student { get; set; } 
 
         public DateTime AppliedOn { get; set; }
         public Status Status { get; set; }  // e.g., Pending, Accepted, Rejected

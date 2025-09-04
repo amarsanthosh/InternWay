@@ -53,6 +53,20 @@ namespace api.Data
                 .HasOne(its => its.Skill)
                 .WithMany()
                 .HasForeignKey(its => its.SkillId);
+
+            // Application relationships
+            builder.Entity<Application>()
+                .HasOne(a => a.Internship)
+                .WithMany()
+                .HasForeignKey(a => a.InternshipId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Application>()
+                .HasOne(a => a.Student)
+                .WithMany()
+                .HasForeignKey(a => a.StudentProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
 
     }
