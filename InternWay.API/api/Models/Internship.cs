@@ -16,7 +16,7 @@ namespace api.Models
 
         public int RecruiterId { get; set; }
         public Recruiter? Recruiter { get; set; }
-        public ICollection<InternshipSkill> RequiredSkills { get; set; } = new List<InternshipSkill>();
+        public ICollection<InternshipSkill> InternshipSkills { get; set; } = new List<InternshipSkill>();
 
     }
 }
