@@ -1,7 +1,9 @@
 using api.Data;
 using api.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,14 +17,40 @@ builder.Services.AddDbContext<ApplicationDbContext>(Options =>
 });
 
 
-// builder.Services.AddIdentity< AppUser,IdentityRole>(Options =>
-// {
-//     Options.Password.RequireDigit = true;
-//     Options.Password.RequiredLength = 8;
-//     Options.Password.RequireLowercase = true;
-//     Options.Password.RequireUppercase = true;
-// }).AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<AppUser, IdentityRole>(Options =>
+{
+    Options.Password.RequireDigit = true;
+    Options.Password.RequiredLength = 8;
+    Options.Password.RequireLowercase = true;
+    Options.Password.RequireUppercase = true;
+}).AddEntityFrameworkStores<ApplicationDbContext>();
 
+var jwtSettings = builder.Configuration.GetSection("JWT");
+
+builder.Services.AddAuthentication(Options =>
+{
+    Options.DefaultAuthenticateScheme =
+    Options.DefaultChallengeScheme =
+    Options.DefaultForbidScheme =
+    Options.DefaultScheme =
+    Options.DefaultSignInScheme =
+    Options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(Options =>
+{
+    Options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            System.Text.Encoding.UTF8.GetBytes(jwtSettings["SigningKey"]!)
+        )
+    };
+} 
+);
 
 
 var app = builder.Build();
@@ -33,6 +61,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
