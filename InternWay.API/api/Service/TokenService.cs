@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using api.Interface;
 using api.Models;
@@ -49,7 +50,7 @@ namespace api.Service
                 Issuer = _config["JWT:Issuer"],
                 Audience = _config["JWT:Audience"]
             };
-            
+
             //Generate the token
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -57,6 +58,17 @@ namespace api.Service
             //writeToken -> converts the token as a String
             return tokenHandler.WriteToken(token);
 
+        }
+        //Refresh Token ->  long time
+        public RefreshToken GenerateRefreshToken(string ipAddress)
+        {
+            return new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Created = DateTime.UtcNow,
+                Expires = DateTime.UtcNow.AddDays(7),
+                CreatedByIp = ipAddress
+            };
         }
     }
 }
