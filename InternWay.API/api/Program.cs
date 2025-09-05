@@ -65,6 +65,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IInternshipRepository, InternshipRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IRecruiterRepository, RecruiterRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
