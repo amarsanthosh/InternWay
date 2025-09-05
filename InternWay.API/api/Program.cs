@@ -1,5 +1,6 @@
 using api.Data;
 using api.Models;
+using api.Seeder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -65,4 +66,5 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
+await AdminRolesSeeder.SeedRolesAndAdminAsync(app);
 app.Run();
