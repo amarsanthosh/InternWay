@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Dtos.Application;
 using api.Dtos.Internship;
 using api.Dtos.Recruiter;
+using api.Dtos.StudentProfile;
 using api.Models;
 using AutoMapper;
 
@@ -32,6 +33,16 @@ namespace api.Mappings
 
             CreateMap<RecruiterCreateDto, Recruiter>();
             CreateMap<RecruiterUpdateDto, Recruiter>();
+
+            CreateMap<StudentCreateDto, StudentProfile>()
+            .ForMember(dest => dest.StudentSkills, opt => opt.MapFrom(
+                src => src.SkillIds.Select(
+                    id => new StudentSkill { SkillId = id })));
+                    
+            CreateMap<StudentUpdateDto, StudentProfile>()
+            .ForMember(dest => dest.StudentSkills, opt => opt.MapFrom(
+                src => src.SkillIds.Select(
+                    id => new StudentSkill { SkillId = id })));        
 
         }
     }

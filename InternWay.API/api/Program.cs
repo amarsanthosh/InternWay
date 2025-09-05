@@ -66,6 +66,8 @@ builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IInternshipRepository, InternshipRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRecruiterRepository, RecruiterRepository>();
+builder.Services.AddScoped<IStudentProfileRepository, StudentProfileRepository>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
