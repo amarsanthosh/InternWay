@@ -2,3 +2,4 @@ api/bin
 api/obj
 api/appsettings.json
 api/migrations
+api/Seeder
