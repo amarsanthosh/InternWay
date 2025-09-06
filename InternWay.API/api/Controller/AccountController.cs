@@ -7,6 +7,7 @@ using api.Interface;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controller
 {
@@ -86,9 +87,90 @@ namespace api.Controller
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-        // [HttpPost("Login")]
 
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName!.ToLower());
+            if (user == null)
+            {
+                return Unauthorized("Invalid user");
+            }
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password!, false);
+            if (!result.Succeeded)
+            {
+                return Unauthorized("Invalid credentials");
+            }
+
+            var RefreshToken = _tokenService.GenerateRefreshToken(HttpContext.Connection.RemoteIpAddress!.ToString());
+
+            user.RefreshTokens.Add(RefreshToken);
+            await _userManager.UpdateAsync(user);
+
+            Response.Cookies.Append("refreshToken", RefreshToken.Token, new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = RefreshToken.Expires
+            });
+            return Ok(new NewUserDto
+            {
+                Username = user.UserName,
+                Email = user.Email,
+                Token = await _tokenService.CreateToken(user),
+                Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault()  //ContinueWith(t => t.Result.FirstOrDefault())
+            });
+        }
+
+        //Returning new access token, by validating and rotating refresh token
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            var user = await _userManager.Users.Include(u => u.RefreshTokens)
+                                                .SingleOrDefaultAsync(u => u.RefreshTokens.Any(i => i.Token == refreshToken));
+
+            if (user == null)
+            {
+                return Unauthorized("Invalid Refresh Token");
+            }
+
+            var token = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
+            if (!token!.IsActive)
+            {
+                return Unauthorized("Token is not Active, Expired/Revoked");
+            }
+
+            //Now we Rotate the Refresh Token {assigning the new one for extra security}
+
+            var remoteIp = HttpContext.Connection.RemoteIpAddress!.ToString();
+
+            token.Revoked = DateTime.UtcNow;
+            token.RevokedByIp = remoteIp;
+
+            var newRefreshToken = _tokenService.GenerateRefreshToken(remoteIp);
+            user.RefreshTokens.Add(newRefreshToken);
+
+            await _userManager.UpdateAsync(user);
+            Response.Cookies.Append("refreshToken", newRefreshToken.Token, new CookieOptions
+            {
+                // Secure = true,
+                // SameSite = SameSiteMode.Strict,
+                HttpOnly = true,
+                Expires = newRefreshToken.Expires
+            });
+
+            var newAccessToken = await _tokenService.CreateToken(user);
+
+            return Ok(new
+            {
+                Token = newAccessToken
+            });
+        }
         
     }
 }

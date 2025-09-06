@@ -27,6 +27,7 @@ namespace api.Service
 
         }
 
+        //JWT Token{Access token} -> short time
         public async Task<string> CreateToken(AppUser user)
         {
             var claims = new List<Claim>

@@ -8,6 +8,8 @@ namespace api.Interface
 {
     public interface ITokenService
     {
-       Task<string> CreateToken(AppUser user);
+        Task<string> CreateToken(AppUser user);
+        RefreshToken GenerateRefreshToken(string ipAddress); 
+       
     }
 }
