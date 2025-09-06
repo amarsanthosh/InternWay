@@ -22,6 +22,8 @@ namespace api.Data
         public DbSet<Application> Applications { get; set; } = null!;
         public DbSet<Recruiter> Recruiters { get; set; } = null!;
 
+        public DbSet<RefreshToken> RefreshTokens{ get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

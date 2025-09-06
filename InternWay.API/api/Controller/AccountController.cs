@@ -109,6 +109,8 @@ namespace api.Controller
 
             var RefreshToken = _tokenService.GenerateRefreshToken(HttpContext.Connection.RemoteIpAddress!.ToString());
 
+            
+
             user.RefreshTokens.Add(RefreshToken);
             await _userManager.UpdateAsync(user);
 

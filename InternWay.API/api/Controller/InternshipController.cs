@@ -6,6 +6,7 @@ using api.Dtos.Internship;
 using api.Interface;
 using api.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controller
@@ -23,6 +24,7 @@ namespace api.Controller
         }
         // GET: api/internship
         [HttpGet]
+        [Authorize(Roles = "Admin,Recruiter,Student")]
         public async Task<IActionResult> GetAllInternships()
         {
             var internships = await _internshipRepository.GetAllInternshipsAsync();
@@ -30,6 +32,7 @@ namespace api.Controller
         }
         // GET: api/internship/{id}
         [HttpGet("{id:int}")]
+        [Authorize(Roles = "Admin,Recruiter,Student")]
         public async Task<IActionResult> GetInternshipById([FromRoute] int id)
         {
             var internship = await _internshipRepository.GetInternshipByIdAsync(id);
@@ -41,6 +44,7 @@ namespace api.Controller
         }
         // POST: api/internship
         [HttpPost]
+        [Authorize(Roles = "Recruiter")]
         public async Task<IActionResult> AddInternship([FromBody] InternshipCreateDto internshipdto)
         {
             var internship = _mapper.Map<Internship>(internshipdto);
@@ -53,6 +57,7 @@ namespace api.Controller
         }
         // PUT: api/internship/{id}
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Recruiter")]
         public async Task<IActionResult> UpdateInternship([FromRoute] int id, [FromBody] InternshipUpdateDto internshipdto)
         {
             var internship = _mapper.Map<Internship>(internshipdto);
@@ -69,6 +74,7 @@ namespace api.Controller
         }
         // DELETE: api/internship/{id}
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Recruiter,Admin")]
         public async Task<IActionResult> DeleteInternship([FromRoute] int id)
         {
             var deletedInternship = await _internshipRepository.DeleteInternshipAsync(id);

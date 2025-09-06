@@ -6,6 +6,7 @@ using api.Dtos.Recruiter;
 using api.Interface;
 using api.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controller
@@ -24,6 +25,7 @@ namespace api.Controller
 
         // GET: api/recruiter
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllRecruiters()
         {
             var recruiters = await _recruiterRepository.GetAllRecruitersAsync();
@@ -31,6 +33,7 @@ namespace api.Controller
         }
         // GET: api/recruiter/{id}
         [HttpGet("{id:int}")]
+        [Authorize(Roles = "Admin,Recruiter")]
         public async Task<IActionResult> GetRecruiterById([FromRoute] int id)
         {
             var recruiter = await _recruiterRepository.GetRecruiterByIdAsync(id);
@@ -43,6 +46,7 @@ namespace api.Controller
 
         // POST: api/recruiter
         [HttpPost]
+        [Authorize(Roles = "Admin,Recruiter")]
         public async Task<IActionResult> AddRecruiter([FromBody] RecruiterCreateDto recruiterdto)
         {
             var recruiter = _mapper.Map<Recruiter>(recruiterdto);
@@ -56,6 +60,7 @@ namespace api.Controller
 
         // PUT: api/recruiter/{id}
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin,Recruiter")]
         public async Task<IActionResult> UpdateRecruiter([FromRoute] int id, [FromBody] RecruiterUpdateDto recruiterdto)
         {
             var recruiter = _mapper.Map<Recruiter>(recruiterdto);
@@ -73,6 +78,7 @@ namespace api.Controller
 
         // DELETE: api/recruiter/{id}
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin,Recruiter")]
         public async Task<IActionResult> DeleteRecruiter([FromRoute] int id)
         {
             var deletedRecruiter = await _recruiterRepository.DeleteRecruiterAsync(id);
