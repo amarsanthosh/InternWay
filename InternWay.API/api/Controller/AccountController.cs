@@ -54,25 +54,6 @@ namespace api.Controller
                     return BadRequest(roleResult.Errors);
                 }
 
-                //Creating profile depending on role
-                if (role == "Student")
-                {
-                    appUser.StudentProfile = new StudentProfile
-                    {
-                        AppUserId = appUser.Id,
-                        FullName = "",
-                        Bio = "",
-
-                    };
-                }
-                else
-                {
-                    appUser.Recruiter = new Recruiter
-                    {
-                        AppUserId = appUser.Id,
-                        CompanyName = "",
-                    };
-                }
                 await _userManager.UpdateAsync(appUser);
 
                 return Ok(new NewUserDto
