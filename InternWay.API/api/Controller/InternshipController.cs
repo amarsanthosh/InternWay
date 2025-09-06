@@ -29,7 +29,7 @@ namespace api.Controller
             return Ok(internships);
         }
         // GET: api/internship/{id}
-        [HttpGet("{int:id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetInternshipById([FromRoute] int id)
         {
             var internship = await _internshipRepository.GetInternshipByIdAsync(id);
@@ -52,7 +52,7 @@ namespace api.Controller
             return Ok("Successfully added");
         }
         // PUT: api/internship/{id}
-        [HttpPut("{int:id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateInternship([FromRoute] int id, [FromBody] InternshipUpdateDto internshipdto)
         {
             var internship = _mapper.Map<Internship>(internshipdto);
@@ -68,7 +68,7 @@ namespace api.Controller
             return Ok("Successfully updated");
         }
         // DELETE: api/internship/{id}
-        [HttpDelete("{int:id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteInternship([FromRoute] int id)
         {
             var deletedInternship = await _internshipRepository.DeleteInternshipAsync(id);

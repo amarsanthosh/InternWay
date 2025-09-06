@@ -30,7 +30,7 @@ namespace api.Controller
         }
 
         // GET: api/studentprofile/{id}
-        [HttpGet("{int:id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetStudentProfileById([FromRoute] int id)
         {
             var studentProfile = await _studentProfileRepository.GetStudentProfileByIdAsync(id);
@@ -55,7 +55,7 @@ namespace api.Controller
         }
 
         // PUT: api/studentprofile/{id}
-        [HttpPut("{int:id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateStudentProfile([FromRoute] int id, [FromBody] StudentUpdateDto studentProfileDto)
         {
             var studentProfile = _mapper.Map<StudentProfile>(studentProfileDto);
@@ -72,7 +72,7 @@ namespace api.Controller
         }
 
         // DELETE: api/studentprofile/{id}
-        [HttpDelete("{int:id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteStudentProfile([FromRoute] int id)
         {
             var deletedStudentProfile = await _studentProfileRepository.DeleteStudentProfileAsync(id);

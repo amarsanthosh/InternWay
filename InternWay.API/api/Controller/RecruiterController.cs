@@ -30,7 +30,7 @@ namespace api.Controller
             return Ok(recruiters);
         }
         // GET: api/recruiter/{id}
-        [HttpGet("{int:id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetRecruiterById([FromRoute] int id)
         {
             var recruiter = await _recruiterRepository.GetRecruiterByIdAsync(id);
@@ -55,7 +55,7 @@ namespace api.Controller
         }
 
         // PUT: api/recruiter/{id}
-        [HttpPut("{int:id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateRecruiter([FromRoute] int id, [FromBody] RecruiterUpdateDto recruiterdto)
         {
             var recruiter = _mapper.Map<Recruiter>(recruiterdto);
@@ -72,7 +72,7 @@ namespace api.Controller
         }
 
         // DELETE: api/recruiter/{id}
-        [HttpDelete("{int:id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteRecruiter([FromRoute] int id)
         {
             var deletedRecruiter = await _recruiterRepository.DeleteRecruiterAsync(id);

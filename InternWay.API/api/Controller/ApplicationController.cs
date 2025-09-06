@@ -30,7 +30,7 @@ namespace api.Controller
             return Ok(applications);
         }
         // GET: api/application/{id}
-        [HttpGet("{int:id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetApplicationById([FromRoute] int id)
         {
             var application = await _applicationRepository.GetApplicationByIdAsync(id);
@@ -53,7 +53,7 @@ namespace api.Controller
             return Ok("Successfully added");
         }
         // PUT: api/application/{id}
-        [HttpPut("{int:id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateApplication([FromRoute] int id, [FromBody] ApplicationUpdateDto applicationdto)
         {
             var application = _mapper.Map<Application>(applicationdto);
@@ -69,7 +69,7 @@ namespace api.Controller
             return Ok("Successfully updated");
         }
         // DELETE: api/application/{id}
-        [HttpDelete("{int:id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteApplication([FromRoute] int id)
         {
             var deletedApplication = await _applicationRepository.DeleteApplicationAsync(id);
