@@ -9,6 +9,10 @@ namespace api.Models
 {
     public class AppUser : IdentityUser
     {
-    
+
+        public StudentProfile? StudentProfile { get; set; }
+        public Recruiter? Recruiter { get; set; }
+        public List<RefreshToken> RefreshTokens { get; set; } = new();
+        
     }
 }

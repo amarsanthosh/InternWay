@@ -15,6 +15,8 @@ namespace api.Dtos.Account
         public string? Email { get; set; }
         [Required]
         public string? Password { get; set; }
+        [Required]
+        public string? Role { get; set; } = "Student"; // Default role is Student
     }
     
 }
