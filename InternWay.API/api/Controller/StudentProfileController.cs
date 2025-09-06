@@ -55,10 +55,16 @@ namespace api.Controller
             }
             var studentProfile = _mapper.Map<StudentProfile>(studentProfileDto);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            studentProfile.AppUserId = userId!; 
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not found in token");
+            }
+
+            studentProfile.AppUserId = userId;
             await _studentProfileRepository.AddStudentProfileAsync(studentProfile);
             return Ok("Successfully added");
         }
+
 
         // PUT: api/studentprofile/{id}
         [HttpPut("{id:int}")]

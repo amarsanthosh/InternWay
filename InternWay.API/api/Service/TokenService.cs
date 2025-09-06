@@ -32,6 +32,7 @@ namespace api.Service
         {
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.GivenName, user.UserName!),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email!)
             };
