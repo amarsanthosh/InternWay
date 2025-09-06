@@ -19,8 +19,6 @@ namespace api.Dtos.Internship
         [Required]
         public string Location { get; set; } = string.Empty;
         [Required]
-        public DateTime PostedOn { get; set; }
-        [Required]
         public bool IsActive { get; set; }
         [Required]
         public int RecruiterId { get; set; }

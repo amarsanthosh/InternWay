@@ -16,24 +16,35 @@ namespace api.Mappings
         public MappingProfile()
         {
             // DTO --> Model  
-            CreateMap<ApplicationCreateDto, Application>();
-            CreateMap<ApplicationUpdateDto, Application>();
 
+            //Application
+            CreateMap<ApplicationCreateDto, Application>()
+                .ForMember(dest => dest.AppliedOn, opt => opt.MapFrom(src => DateTime.UtcNow));
+            CreateMap<ApplicationUpdateDto, Application>()
+                .ForMember(dest => dest.AppliedOn, opt => opt.Ignore());
+
+            //Internship
             CreateMap<InternshipCreateDto, Internship>()
-            .ForMember(dest => dest.InternshipSkills,
-            opt => opt.MapFrom(
-                src => src.SkillIds.Select(
-                    id => new InternshipSkill { SkillId = id })));
+                .ForMember(dest => dest.PostedOn, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.InternshipSkills,
+                    opt => opt.MapFrom(
+                        src => src.SkillIds.Select(
+                            id => new InternshipSkill { SkillId = id })));
 
             CreateMap<InternshipUpdateDto, Internship>()
-            .ForMember(dest => dest.InternshipSkills,
-            opt => opt.MapFrom(
-                src => src.SkillIds.Select(
-                    id => new InternshipSkill { SkillId = id })));
+                .ForMember(dest => dest.PostedOn, opt => opt.Ignore())
+                .ForMember(dest => dest.InternshipSkills,
+                    opt => opt.MapFrom(
+                        src => src.SkillIds.Select(
+                            id => new InternshipSkill { SkillId = id })));
 
+
+            //Recruiter
             CreateMap<RecruiterCreateDto, Recruiter>();
             CreateMap<RecruiterUpdateDto, Recruiter>();
 
+
+            //Student
             CreateMap<StudentCreateDto, StudentProfile>()
             .ForMember(dest => dest.StudentSkills, opt => opt.MapFrom(
                 src => src.SkillIds.Select(
