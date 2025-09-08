@@ -27,9 +27,13 @@ namespace api.Mappings
             CreateMap<InternshipCreateDto, Internship>()
                 .ForMember(dest => dest.PostedOn, opt => opt.MapFrom(src => DateTime.UtcNow))
                 .ForMember(dest => dest.InternshipSkills,
-                    opt => opt.MapFrom(
-                        src => src.SkillIds.Select(
-                            id => new InternshipSkill { SkillId = id })));
+                    opt => opt.MapFrom(src =>
+                        src.SkillIds.Select(id => new InternshipSkill
+                        {
+                            SkillId = id
+                            // InternshipId will be filled by EF when saving
+                        })));
+
 
             CreateMap<InternshipUpdateDto, Internship>()
                 .ForMember(dest => dest.PostedOn, opt => opt.Ignore())

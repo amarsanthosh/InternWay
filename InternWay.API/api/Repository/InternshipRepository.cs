@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos.Internship;
 using api.Interface;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -36,10 +37,31 @@ namespace api.Repository
             return existingInternship;
         }
 
-        public async Task<List<Internship>> GetAllInternshipsAsync()
+        public async Task<List<InternshipDto>> GetAllInternshipsAsync()
         {
-            return await _context.Internships.ToListAsync();
+            return await _context.Internships
+            .Include(i => i.InternshipSkills)
+            .ThenInclude(iss => iss.Skill)
+            .Select(i => new InternshipDto
+            {
+                Id = i.Id,
+                Title = i.Title,
+                Description = i.Description,
+                Location = i.Location,
+                PostedOn = i.PostedOn,
+                IsActive = i.IsActive,
+                RecruiterId = i.RecruiterId,
+                Skills = i.InternshipSkills
+            .Select(isss => new SkillDto
+            {
+                Id = isss.Skill.Id,
+                Name = isss.Skill.Name
+            }).ToList()
+            })
+    
+            .ToListAsync();
         }
+
 
         public async Task<Internship?> GetInternshipByIdAsync(int id)
         {
