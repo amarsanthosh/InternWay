@@ -64,7 +64,7 @@ namespace api.Repository
             existingStudentProfile.LinkedInUrl = studentProfile.LinkedInUrl;
             existingStudentProfile.ResumeUrl = studentProfile.ResumeUrl;
             existingStudentProfile.StudentSkills = studentProfile.StudentSkills;
-
+            // existingStudentProfile.AppUserId = studentProfile.AppUserId;
             await _context.SaveChangesAsync();
             return existingStudentProfile;
         }

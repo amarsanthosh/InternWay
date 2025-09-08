@@ -61,7 +61,7 @@ namespace api.Repository
             existingRecruiter.About = recruiter.About;
             existingRecruiter.CompanyName = recruiter.CompanyName;
             existingRecruiter.Location = recruiter.Location;
-
+            // existingRecruiter.AppUserId = recruiter.AppUserId;           
             await _context.SaveChangesAsync();
             return existingRecruiter;
         }

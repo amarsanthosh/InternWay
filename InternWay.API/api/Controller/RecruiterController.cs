@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using api.Dtos.Recruiter;
 using api.Interface;
@@ -49,11 +50,17 @@ namespace api.Controller
         [Authorize(Roles = "Admin,Recruiter")]
         public async Task<IActionResult> AddRecruiter([FromBody] RecruiterCreateDto recruiterdto)
         {
-            var recruiter = _mapper.Map<Recruiter>(recruiterdto);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            var recruiter = _mapper.Map<Recruiter>(recruiterdto);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not found in token");
+            }
+            recruiter.AppUserId = userId; 
             await _recruiterRepository.AddRecruiterAsync(recruiter);
             return Ok("Successfully added");
         }
@@ -68,6 +75,12 @@ namespace api.Controller
             {
                 return BadRequest(ModelState);
             }
+            // var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // if (string.IsNullOrEmpty(userId))
+            // {
+            //     return Unauthorized("User not found in token");
+            // }
+            // recruiter.AppUserId = userId;
             var updatedRecruiter = await _recruiterRepository.UpdateRecruiterAsync(id, recruiter);
             if (updatedRecruiter == null)
             {

@@ -76,6 +76,12 @@ namespace api.Controller
             {
                 return BadRequest(ModelState);
             }
+            // var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // if (string.IsNullOrEmpty(userId))
+            // {
+            //     return Unauthorized("User not found in token");
+            // }
+            // studentProfile.AppUserId = userId;
             var updatedStudentProfile = await _studentProfileRepository.UpdateStudentProfileAsync(id, studentProfile);
             if (updatedStudentProfile == null)
             {
