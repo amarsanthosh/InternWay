@@ -39,6 +39,7 @@ namespace api.Repository
 
         public async Task<List<InternshipDto>> GetAllInternshipsAsync()
         {
+            // return await _context.Internships.ToListAsync();
             return await _context.Internships
             .Include(i => i.InternshipSkills)
             .ThenInclude(iss => iss.Skill)
@@ -55,22 +56,42 @@ namespace api.Repository
             .Select(isss => new SkillDto
             {
                 Id = isss.Skill.Id,
-                Name = isss.Skill.Name
+                // Name = isss.Skill.Name
             }).ToList()
             })
     
-            .ToListAsync();
+            .ToListAsync(); //
         }
 
 
-        public async Task<Internship?> GetInternshipByIdAsync(int id)
+        public async Task<InternshipDto?> GetInternshipByIdAsync(int id)
         {
-            var internship = await _context.Internships.FirstOrDefaultAsync(i => i.Id == id);
+            var internship = await _context.Internships
+            .Include(i => i.InternshipSkills)
+            .ThenInclude(iss => iss.Skill)
+            .FirstOrDefaultAsync(i => i.Id == id);
+
             if (internship == null)
             {
                 return null;
+
             }
-            return internship;
+            return new InternshipDto
+            {
+                Id = internship.Id,
+                Title = internship.Title,
+                Description = internship.Description,
+                Location = internship.Location,
+                PostedOn = internship.PostedOn,
+                IsActive = internship.IsActive,
+                RecruiterId = internship.RecruiterId,
+                Skills = internship.InternshipSkills
+            .Select(isss => new SkillDto
+            {
+                Id = isss.Skill.Id,
+                // Name = isss.Skill.Name
+            }).ToList()
+            };
         }
 
         public async Task<Internship?> UpdateInternshipAsync(int id, Internship internship)

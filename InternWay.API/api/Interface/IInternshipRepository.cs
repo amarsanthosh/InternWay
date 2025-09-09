@@ -10,7 +10,7 @@ namespace api.Interface
     public interface IInternshipRepository
     {
         Task<List<InternshipDto>> GetAllInternshipsAsync();
-        Task<Internship?> GetInternshipByIdAsync(int id);
+        Task<InternshipDto?> GetInternshipByIdAsync(int id);
         Task<Internship?> AddInternshipAsync(Internship internship);
         Task<Internship?> UpdateInternshipAsync(int id, Internship internship);
         Task<Internship?> DeleteInternshipAsync(int id);
